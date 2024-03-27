@@ -63,7 +63,7 @@ const GameInfoProvider = ({ children }: Props) => {
             currMonstersUsed: 0,
             currRoundNumber: 1,
             totalRounds: 2, // TODO: change this based on difficulty
-            noOfAttributes: 8, // TODO: generate this
+            noOfAttributes: 10, // TODO: generate this
             closuresOfSetsUsed: new Map<string, string>(),
         });
     };
