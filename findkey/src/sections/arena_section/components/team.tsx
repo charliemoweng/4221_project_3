@@ -36,8 +36,6 @@ const Team = (props: Props) => {
                 require(`../../../assets/Trainers/${props.trainerName}.gif`)
             );
         }, 0);
-
-        console.log("je;;p???");
     }, [props.trainerName, matchInfo?.currRoundNumber]);
 
     const renderTeam = () => {

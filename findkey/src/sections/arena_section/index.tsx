@@ -18,10 +18,13 @@ enum AlertStates {
     LOSE,
 }
 
+const FIGHT_CLOUD_ANIM_TIME = 2000; //its in miliseconds
+
 const ArenaSection = (props: Props) => {
     const [currTeam, setCurrTeam] = useState<Set<string>>(new Set<string>());
     const [isSelectingTeam, setIsSelectingTeam] = useState<boolean>(true);
     const [alertState, setAlertState] = useState<AlertStates>(AlertStates.NONE);
+    const [showFightCloud, setShowFightCloud] = useState<boolean>(false);
 
     // to keep track of values after fighting
     const [enemiesDead, setEnemiesDead] = useState<Set<string>>(
@@ -57,15 +60,22 @@ const ArenaSection = (props: Props) => {
             return;
         }
 
-        // get closure and whether all the enemies were wiped out
-        setEnemiesDead(fightOpponent(currTeam));
+        // show animation
+        setShowFightCloud(true);
+        setAlertState(AlertStates.NONE);
 
-        // if enemies dead size is the number of attributes, it means the enemy team got wiped, player won
-        setIsWinRound(enemiesDead.size === matchInfo?.noOfAttributes);
-        setAlertState(isWinRound ? AlertStates.WIN : AlertStates.LOSE);
+        setTimeout(() => {
+            setShowFightCloud(false);
+            // get closure and whether all the enemies were wiped out
+            setEnemiesDead(fightOpponent(currTeam));
 
-        //change fight button to next round button
-        setIsSelectingTeam(false);
+            // if enemies dead size is the number of attributes, it means the enemy team got wiped, player won
+            setIsWinRound(enemiesDead.size === matchInfo?.noOfAttributes);
+            setAlertState(isWinRound ? AlertStates.WIN : AlertStates.LOSE);
+
+            //change fight button to next round button
+            setIsSelectingTeam(false);
+        }, FIGHT_CLOUD_ANIM_TIME);
     };
 
     const startNextRound = () => {
@@ -149,6 +159,18 @@ const ArenaSection = (props: Props) => {
         return <div style={styles.selectionButtonContainer}>{buttons}</div>;
     }, [monsterTypes, currTeam, isSelectingTeam]);
 
+    const renderFightCloud = () => {
+        return (
+            <img
+                src={require(`../../assets/fightcloud.gif`)}
+                alt={`fight cloud animation`}
+                style={{
+                    ...styles.fightCloud,
+                }}
+            />
+        );
+    };
+
     return (
         <div style={styles.container}>
             <div style={styles.arenaContainer}>
@@ -194,6 +216,7 @@ const ArenaSection = (props: Props) => {
                 )}
                 {renderAlerts()}
             </div>
+            {showFightCloud && renderFightCloud()}
         </div>
     );
 };
@@ -203,6 +226,8 @@ const styles: any = {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        height: "auto",
+        position: "relative",
     },
     arenaContainer: {
         display: "flex",
@@ -258,6 +283,15 @@ const styles: any = {
         "& .MuiAlert-icon": {
             fontSize: 40,
         },
+    },
+    fightCloud: {
+        position: "absolute",
+        left: 0,
+        right: 0,
+        marginLeft: "auto",
+        marginRight: "auto",
+        width: "auto",
+        height: "100%",
     },
 };
 
