@@ -141,7 +141,7 @@ const styles: any = {
     },
     rowContainer: {
         width: "100%",
-        minHeight: "120px",
+        minHeight: "170px",
         // border: "1px solid black",
     },
     trainerImg: {
@@ -153,7 +153,7 @@ const styles: any = {
     teamContainer: {
         // border: "1px solid black",
         height: "auto",
-        width: "50%",
+        width: "60%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
