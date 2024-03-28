@@ -50,7 +50,7 @@ const Team = (props: Props) => {
                         justifyContent={
                             props.trainerIsOnRight ? "flex-end" : "flex-start"
                         }
-                        sx={{ width: "100%", border: "1px solid black" }}
+                        sx={styles.rowContainer}
                     >
                         {props.monsters.map((monsterId, index) => {
                             if (index % MAX_ROWS === rowIndex) {
@@ -115,15 +115,21 @@ const styles: any = {
         display: "flex",
         direction: "row",
         alignItems: "center",
-        border: "1px solid black",
+        // border: "1px solid black",
         width: "50%",
         height: "auto",
     },
     monsterImg: {
         width: "100%",
-        height: "auto",
+        height: "100%",
+        minHeight: "40px",
         objectFit: "cover",
         imageRendering: "pixelated",
+    },
+    rowContainer: {
+        width: "100%",
+        minHeight: "120px",
+        // border: "1px solid black",
     },
     trainerImg: {
         width: "auto",
@@ -132,7 +138,7 @@ const styles: any = {
         imageRendering: "pixelated",
     },
     teamContainer: {
-        border: "1px solid black",
+        // border: "1px solid black",
         height: "auto",
         width: "50%",
         display: "flex",

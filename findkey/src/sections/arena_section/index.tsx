@@ -68,10 +68,10 @@ const ArenaSection = (props: Props) => {
                         "D",
                         "E",
                         "F",
-                        // "G",
-                        // "H",
-                        // "J",
-                        // "I",
+                        "G",
+                        "H",
+                        "J",
+                        "I",
                     ]}
                     flipSprites={false}
                     trainerIsOnRight={true}
@@ -89,6 +89,7 @@ const styles: any = {
         justifyContent: "space-between",
         borderWidth: "3px",
         borderColor: "black",
+        margin: "70px",
     },
 };
 
