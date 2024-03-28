@@ -4,6 +4,7 @@ import { Box, Button } from "@mui/material";
 type Props = {
     style?: any;
     isSelected: boolean;
+    isDisabled: boolean;
     id: string;
     onClick: (id: string) => void;
 };
@@ -23,6 +24,7 @@ const MonsterSelectionButton = (props: Props) => {
                     : styles.isNotSelectedButton,
                 props.style,
             ]}
+            disabled={props.isDisabled}
             onClick={() => props.onClick(props.id)}
             onMouseEnter={() => handleMouseHover(true)}
             onMouseLeave={() => handleMouseHover(false)}

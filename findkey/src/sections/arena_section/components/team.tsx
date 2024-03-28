@@ -66,15 +66,25 @@ const Team = (props: Props) => {
                                         xs={itemSize}
                                         zeroMinWidth
                                     >
-                                        <img
-                                            src={require(`../../../assets/monsters/${monsterId}.gif`)}
-                                            alt={`monster ${monsterId}`}
-                                            style={{
-                                                ...styles.monsterImg,
-                                                ...(props.flipSprites &&
-                                                    styles.flipImg),
-                                            }}
-                                        />
+                                        {props.deadMonsters?.has(monsterId) ? (
+                                            <img
+                                                src={require(`../../../assets/grave.png`)}
+                                                alt={`monster ${monsterId} died`}
+                                                style={{
+                                                    ...styles.monsterImg,
+                                                }}
+                                            />
+                                        ) : (
+                                            <img
+                                                src={require(`../../../assets/monsters/${monsterId}.gif`)}
+                                                alt={`monster ${monsterId}`}
+                                                style={{
+                                                    ...styles.monsterImg,
+                                                    ...(props.flipSprites &&
+                                                        styles.flipImg),
+                                                }}
+                                            />
+                                        )}
                                     </Grid>
                                 );
                             }

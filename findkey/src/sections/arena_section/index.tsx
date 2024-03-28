@@ -62,15 +62,27 @@ const ArenaSection = (props: Props) => {
         handleNewRound();
     };
 
-    const monsterSelectionSection = useMemo(() => {
-        const buttons = [];
-        if (matchInfo === null) return;
+    const monsterTypes: Set<string> = useMemo(() => {
+        const monsters = new Set<string>();
+        if (matchInfo === null) return monsters;
 
         for (let i = 0; i < matchInfo.noOfAttributes; ++i) {
-            let id = String.fromCharCode(64 + i + 1); // map integer to capital letters
+            let id = String.fromCharCode(64 + i + 1);
+            monsters.add(id);
+        }
+
+        return monsters;
+    }, [matchInfo?.noOfAttributes]);
+
+    const renderMonsterSelectionSection = useMemo(() => {
+        const buttons: any[] = [];
+        if (matchInfo === null) return;
+
+        monsterTypes?.forEach((id) => {
             buttons.push(
                 <MonsterSelectionButton
-                    key={i}
+                    isDisabled={!isSelectingTeam}
+                    key={id}
                     id={id}
                     isSelected={currTeam.has(id)}
                     onClick={
@@ -79,10 +91,15 @@ const ArenaSection = (props: Props) => {
                     style={styles.selectionButton}
                 />
             );
-        }
+        });
 
         return <div style={styles.selectionContainer}>{buttons}</div>;
-    }, [matchInfo?.noOfAttributes, currTeam]);
+    }, [monsterTypes, currTeam, isSelectingTeam]);
+
+    // if player could not wipe enemy team, it means their team got wiped
+    const isPlayerTeamWiped = () => {
+        return !isSelectingTeam && !isWinRound;
+    };
 
     return (
         <div style={styles.container}>
@@ -93,28 +110,20 @@ const ArenaSection = (props: Props) => {
                     monsters={[...currTeam]}
                     flipSprites={true}
                     trainerIsOnRight={false}
+                    deadMonsters={
+                        isPlayerTeamWiped() ? monsterTypes : undefined
+                    }
                 />
                 <Team
                     teamSize={matchInfo ? matchInfo.noOfAttributes : 0}
                     trainerName="opponent"
-                    monsters={[
-                        "A",
-                        "B",
-                        "C",
-                        "D",
-                        "E",
-                        "F",
-                        "G",
-                        "H",
-                        "J",
-                        "I",
-                    ]}
+                    monsters={Array.from(monsterTypes)}
                     flipSprites={false}
                     trainerIsOnRight={true}
                     deadMonsters={enemiesDead}
                 />
             </div>
-            {monsterSelectionSection}
+            {renderMonsterSelectionSection}
             {isSelectingTeam ? (
                 <Button variant="contained" onClick={handleFight}>
                     Fight
