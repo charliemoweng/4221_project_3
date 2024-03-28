@@ -4,6 +4,7 @@ import {
     GameInfoContextType,
 } from "../../hooks/GameInfoProvider";
 import MonsterSelectionButton from "./components/monsterSelectionButton";
+import Team from "./components/team";
 
 type Props = {};
 
@@ -32,7 +33,6 @@ const ArenaSection = (props: Props) => {
 
         for (let i = 0; i < matchInfo.noOfAttributes; ++i) {
             let id = String.fromCharCode(64 + i + 1); // map integer to capital letters
-            console.log("Je;;p??");
             buttons.push(
                 <MonsterSelectionButton
                     key={i}
@@ -48,7 +48,48 @@ const ArenaSection = (props: Props) => {
         return buttons;
     }, [matchInfo?.noOfAttributes, currTeam]);
 
-    return <div>{monsterSelectionSection}</div>;
+    return (
+        <div>
+            <div style={styles.arenaContainer}>
+                <Team
+                    teamSize={matchInfo ? matchInfo.noOfAttributes : 0}
+                    trainerName="player"
+                    monsters={[...currTeam]}
+                    flipSprites={true}
+                    trainerIsOnRight={false}
+                />
+                <Team
+                    teamSize={matchInfo ? matchInfo.noOfAttributes : 0}
+                    trainerName="opponent"
+                    monsters={[
+                        "A",
+                        "B",
+                        "C",
+                        "D",
+                        "E",
+                        "F",
+                        // "G",
+                        // "H",
+                        // "J",
+                        // "I",
+                    ]}
+                    flipSprites={false}
+                    trainerIsOnRight={true}
+                />
+            </div>
+            {monsterSelectionSection}
+        </div>
+    );
+};
+
+const styles: any = {
+    arenaContainer: {
+        display: "flex",
+        direction: "row",
+        justifyContent: "space-between",
+        borderWidth: "3px",
+        borderColor: "black",
+    },
 };
 
 export default React.memo(ArenaSection);

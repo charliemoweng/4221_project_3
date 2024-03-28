@@ -15,11 +15,12 @@ const MonsterSelectionButton = (props: Props) => {
 
     return (
         <Button
-            sx={
+            sx={[
+                styles.button,
                 props.isSelected
                     ? styles.isSelectedButton
-                    : styles.isNotSelectedButton
-            }
+                    : styles.isNotSelectedButton,
+            ]}
             onClick={() => props.onClick(props.id)}
             onMouseEnter={() => handleMouseHover(true)}
             onMouseLeave={() => handleMouseHover(false)}
@@ -40,21 +41,22 @@ const styles: any = {
     monsterImg: {
         width: "100%",
         height: "100%",
+        objectFit: "cover",
         imageRendering: "pixelated",
     },
-    isSelectedButton: {
+    button: {
         backgroundColor: "rgba(255,255,255,1)",
+        overflow: "hidden",
+    },
+    isSelectedButton: {
         ":hover": {
             backgroundColor: "rgba(255,255,255,1)",
         },
-        overflow: "hidden",
     },
     isNotSelectedButton: {
-        backgroundColor: "rgba(255,255,255,1)",
         ":hover": {
             backgroundColor: "rgba(0,0,0, 0.05)",
         },
-        overflow: "hidden",
     },
     overlay: {
         content: '""',
