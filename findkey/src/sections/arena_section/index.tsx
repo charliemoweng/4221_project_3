@@ -101,24 +101,24 @@ const ArenaSection = (props: Props) => {
         return (
             <div style={styles.popup}>
                 {alertState === AlertStates.NO_MONSTERS_PICKED && (
-                    <Alert severity="error">
+                    <Alert severity="error" sx={styles.alert}>
                         Your team is empty! You need to select at least 1
                         monster!
                     </Alert>
                 )}
                 {alertState === AlertStates.TEAM_PICKED_BEFORE && (
-                    <Alert severity="warning">
+                    <Alert severity="warning" sx={styles.alert}>
                         You already selected this combination of monsters! Pick
                         a different combination.
                     </Alert>
                 )}
                 {alertState === AlertStates.WIN && (
-                    <Alert severity="success">
+                    <Alert severity="success" sx={styles.alert}>
                         Successfully defeated the enemy's team!
                     </Alert>
                 )}
                 {alertState === AlertStates.LOSE && (
-                    <Alert severity="warning">
+                    <Alert severity="warning" sx={styles.alert}>
                         You were unable to full wipe the enemy's team and lost
                         this round...
                     </Alert>
@@ -228,9 +228,11 @@ const styles: any = {
     },
     button: {
         marginTop: "30px",
-        width: "150px",
-        height: "50px",
+        width: "220px",
+        height: "60px",
         justifyContent: "space-evenly",
+        fontSize: 20,
+        fontWeight: "bold",
     },
     fightButton: {
         backgroundColor: "#FF8C00",
@@ -246,7 +248,16 @@ const styles: any = {
     },
     popup: {
         marginTop: "30px",
-        width: "600px",
+        width: "800px",
+    },
+    alert: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: 20,
+        "& .MuiAlert-icon": {
+            fontSize: 40,
+        },
     },
 };
 
