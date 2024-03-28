@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button } from "@mui/material";
 
 type Props = {
+    style?: any;
     isSelected: boolean;
     id: string;
     onClick: (id: string) => void;
@@ -20,6 +21,7 @@ const MonsterSelectionButton = (props: Props) => {
                 props.isSelected
                     ? styles.isSelectedButton
                     : styles.isNotSelectedButton,
+                props.style,
             ]}
             onClick={() => props.onClick(props.id)}
             onMouseEnter={() => handleMouseHover(true)}
@@ -41,7 +43,9 @@ const styles: any = {
     monsterImg: {
         width: "100%",
         height: "100%",
-        objectFit: "cover",
+        maxWidth: "100%",
+        maxHeight: "100%",
+        objectFit: "contain",
         imageRendering: "pixelated",
     },
     button: {

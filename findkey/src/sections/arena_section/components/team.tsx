@@ -29,11 +29,16 @@ const Team = (props: Props) => {
     const [trainerFilePath, setTrainerFilePath] = useState<string>("");
 
     useEffect(() => {
-        // replay animation on next match
-        setTrainerFilePath(
-            require(`../../../assets/Trainers/${props.trainerName}.gif`)
-        );
-    }, [matchInfo?.currRoundNumber]);
+        // force re-render of gif so animation plays
+        setTrainerFilePath("");
+        setTimeout(() => {
+            setTrainerFilePath(
+                require(`../../../assets/Trainers/${props.trainerName}.gif`)
+            );
+        }, 0);
+
+        console.log("je;;p???");
+    }, [props.trainerName, matchInfo?.currRoundNumber]);
 
     const renderTeam = () => {
         const MAX_ROWS = 2;
@@ -123,7 +128,7 @@ const styles: any = {
         width: "100%",
         height: "100%",
         minHeight: "40px",
-        objectFit: "cover",
+        objectFit: "contain",
         imageRendering: "pixelated",
     },
     rowContainer: {
@@ -134,7 +139,7 @@ const styles: any = {
     trainerImg: {
         width: "auto",
         height: "100%",
-        objectFit: "cover",
+        objectFit: "contain",
         imageRendering: "pixelated",
     },
     teamContainer: {
