@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+.landing { 
+  text-align: center;
+}
+
+.rulesForm {
+  display: inline-flex;
+  justify-content: center;
+  width: 80%;
+}
+
+.rules {
+  padding: 30px;
+}
+
+.form {
+  display: flex;
+  padding: 30px;
+  width: 50%;
+}
+
+p, li {
+  font-size: 25px;
+}
+
+h1 {
+  text-align: center;
+}
