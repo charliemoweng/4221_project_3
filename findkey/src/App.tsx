@@ -9,37 +9,64 @@ function App() {
     const [isSubmitted, setSubmitted] = useState(false);
 
     if (isSubmitted) {
+    }
+
+    const renderGamePage = () => {
         return (
             <div className="App">
                 <h1>Relax and Find the Key</h1>
-            <GameInfoProvider>
-            <div>
-                <ArenaSection />
+                <div>
+                    <ArenaSection />
+                </div>
             </div>
-            </GameInfoProvider>
+        );
+    };
+
+    const renderLandingPage = () => {
+        return (
+            <div className="landing">
+                <h1>Relax and Find the Key</h1>
+                <p>
+                    Goal: use the least number of monsters to kill the
+                    opponent's team. The least number of monsters is the
+                    candidate key of the set.
+                </p>
+                <div className="rulesForm">
+                    <div className="rules">
+                        <h2>Rules</h2>
+                        <ul>
+                            <li>
+                                A monster of the same variant can always kill
+                                each other. A -&gt; A (reflexivity rule)
+                            </li>
+                            <li>
+                                If A -&gt; BC, then monster A can kill monster B
+                                and C
+                            </li>
+                            <li>
+                                If the closure calculated for A is the set (A,
+                                B, C, D), then monster A can kill the opponent’s
+                                monsters A, B, C and D.
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="form">
+                        <StartGameForm
+                            isSubmitted={isSubmitted}
+                            setSubmitted={setSubmitted}
+                        ></StartGameForm>
+                    </div>
+                </div>
             </div>
-        )
-    }
+        );
+    };
 
     return (
-        <div className="landing">
+        <div>
             <GameInfoProvider>
-            <h1>Relax and Find the Key</h1>
-            <p>Goal: use the least number of monsters to kill the opponent's team. The least number of monsters is the candidate key of the set.
-            </p>
-            <div className="rulesForm">
-                <div className="rules"><h2>Rules</h2>
-                <ul>
-                    <li>A monster of the same variant can always kill each other. A -&gt; A (reflexivity rule)</li>
-                    <li>If A -&gt; BC, then monster A can kill monster B and C</li>
-                    <li>If the closure calculated for A is the set (A, B, C, D), then monster A can kill the opponent’s monsters A, B, C and D.</li>
-                </ul></div>
-                <div className="form">
-                <StartGameForm isSubmitted={isSubmitted} setSubmitted={setSubmitted}></StartGameForm></div>
-            </div>
+                {isSubmitted ? renderGamePage() : renderLandingPage()}
             </GameInfoProvider>
         </div>
-
     );
 }
 
