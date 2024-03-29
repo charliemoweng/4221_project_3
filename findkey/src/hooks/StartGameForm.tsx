@@ -1,21 +1,21 @@
 import { Button, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
 import "./StartGameForm.css";
+import { GameInfoContext, GameInfoContextType } from "./GameInfoProvider";
 
 interface StartGameFormProps {
     isSubmitted: boolean;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    onFormSubmit: () => void;
   }
 
-const StartGameForm: React.FC<StartGameFormProps> = ({isSubmitted, setSubmitted, onFormSubmit}) => {
+const StartGameForm: React.FC<StartGameFormProps> = ({isSubmitted, setSubmitted}) => {
     const [difficulty, setDifficulty] = useState('1');
-    
+    const { handleNewMatch } = React.useContext(GameInfoContext) as GameInfoContextType;
+
     function handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault();
-        console.log(difficulty);
         setSubmitted(true);
-        onFormSubmit(); // Call the function passed from the parent
+        handleNewMatch(parseInt(difficulty));
     }
 
     return (

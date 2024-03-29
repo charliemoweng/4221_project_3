@@ -8,10 +8,6 @@ function App() {
     // Checks whether the form is submitted. If true, the form component is replaced with the game.
     const [isSubmitted, setSubmitted] = useState(false);
 
-    const handleFormSubmit = () => {
-        // can call 'backend' API here
-    };
-
     if (isSubmitted) {
         return (
             <div className="App">
@@ -27,6 +23,7 @@ function App() {
 
     return (
         <div className="landing">
+            <GameInfoProvider>
             <h1>Relax and Find the Key</h1>
             <p>Goal: use the least number of monsters to kill the opponent's team. The least number of monsters is the candidate key of the set.
             </p>
@@ -38,8 +35,9 @@ function App() {
                     <li>If the closure calculated for A is the set (A, B, C, D), then monster A can kill the opponent’s monsters A, B, C and D.</li>
                 </ul></div>
                 <div className="form">
-                <StartGameForm isSubmitted={isSubmitted} setSubmitted={setSubmitted} onFormSubmit={handleFormSubmit}></StartGameForm></div>
+                <StartGameForm isSubmitted={isSubmitted} setSubmitted={setSubmitted}></StartGameForm></div>
             </div>
+            </GameInfoProvider>
         </div>
 
     );
