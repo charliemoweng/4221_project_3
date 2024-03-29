@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 type Props = {
     style?: any;
@@ -37,6 +37,7 @@ const MonsterSelectionButton = (props: Props) => {
                 style={styles.monsterImg}
                 alt={`Monster type ${props.id}`}
             />
+            <Typography sx={styles.monsterName}>{props.id}</Typography>
         </Button>
     );
 };
@@ -53,6 +54,7 @@ const styles: any = {
     button: {
         backgroundColor: "rgba(255,255,255,1)",
         overflow: "hidden",
+        position: "relative",
     },
     isSelectedButton: {
         ":hover": {
@@ -76,6 +78,14 @@ const styles: any = {
     },
     overlayHover: {
         backgroundColor: "rgba(0, 0, 0, 0.4)",
+    },
+    monsterName: {
+        position: "absolute",
+        bottom: 0,
+        right: 0,
+        fontWeight: "bold",
+        fontSize: "15px",
+        color: "black",
     },
 };
 
