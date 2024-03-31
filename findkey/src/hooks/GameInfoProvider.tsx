@@ -18,6 +18,8 @@ export interface MatchInfo {
 
     // the different function dependencies for current match
     // functionalDependencies: An array of functional dependencies
+    // array of string, string tuples
+    functionalDependencies: [string, string][];
 
     /**
      * all closures of sets that was previously selected by the player in this match
@@ -115,12 +117,21 @@ const GameInfoProvider = ({ children }: Props) => {
     const handleNewMatch = (difficulty: number) => {
         // TODO: call the functions to generate FDs and no of attributes here based on difficulty
 
+        // TODO: replace hardcoded example with generated FDs
+        const tempFDs = new Array<[string, string]>();
+        tempFDs.push(["A", "BC"]);
+        tempFDs.push(["BC", "D"]);
+        tempFDs.push(["D", "EF"]);
+        tempFDs.push(["H", "GIJ"]);
+        const noAttributes = 10;
+
         setMatchInfo({
             candidateNoOfKeysFound: 0,
             currMonstersUsed: 0,
             currRoundNumber: 1,
             totalRounds: 2, // TODO: change this based on difficulty
-            noOfAttributes: 10, // TODO: generate this
+            noOfAttributes: noAttributes, // TODO: generate this
+            functionalDependencies: tempFDs,
             closuresOfSetsUsed: new Map<string, string>(),
         });
     };

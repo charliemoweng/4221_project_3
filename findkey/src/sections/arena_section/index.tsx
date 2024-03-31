@@ -7,6 +7,7 @@ import { Button, Alert } from "@mui/material";
 import MonsterSelectionButton from "./components/monsterSelectionButton";
 import Team from "./components/team";
 import { GiShardSword, GiNextButton } from "react-icons/gi";
+import FunctionalDependencies from "./components/functionalDependencies";
 
 type Props = {};
 
@@ -173,6 +174,12 @@ const ArenaSection = (props: Props) => {
 
     return (
         <div style={styles.container}>
+            <div style={styles.FDContainer}>
+                <FunctionalDependencies
+                    monsters={[...currTeam]}
+                ></FunctionalDependencies>
+                <hr></hr>
+            </div>
             <div style={styles.arenaContainer}>
                 <Team
                     teamSize={matchInfo ? matchInfo.noOfAttributes : 0}
@@ -228,6 +235,10 @@ const styles: any = {
         justifyContent: "center",
         height: "auto",
         position: "relative",
+    },
+    FDContainer: {
+        flexDirection: "row",
+        alignItems: "left",
     },
     arenaContainer: {
         display: "flex",
