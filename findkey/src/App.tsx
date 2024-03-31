@@ -3,6 +3,7 @@ import GameInfoProvider from "./hooks/GameInfoProvider";
 import StartGameForm from "./hooks/StartGameForm";
 import ArenaSection from "./sections/arena_section";
 import { useState } from "react";
+import FunctionalDependencies from "./sections/arena_section/components/functionalDependencies";
 
 function App() {
     // Checks whether the form is submitted. If true, the form component is replaced with the game.
@@ -16,8 +17,10 @@ function App() {
             <div className="App">
                 <h1>Relax and Find the Key</h1>
                 <div>
-                    <ArenaSection />
+                <FunctionalDependencies></FunctionalDependencies>
+                <hr></hr>
                 </div>
+                <ArenaSection />
             </div>
         );
     };

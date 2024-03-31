@@ -1,84 +1,81 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
     GameInfoContext,
     GameInfoContextType,
 } from "../../../hooks/GameInfoProvider";
 import { Grid, Typography } from "@mui/material";
 
-type Props = {
-    monsters: string[];
-};
-
-const FunctionalDependencies = (props: Props) => {
+const FunctionalDependencies = () => {
     const { matchInfo } = React.useContext(GameInfoContext) as GameInfoContextType;
 
     const renderMonster = (
         monsterId: string,
-        index: number,
         itemSize: number,
         count: number,
     ) => {
         return (
-            // <Grid key={index} item xs={itemSize} sx={styles.monsterContainer}>
-            <div key={index}>
-                    <img
-                        src={require(`../../../assets/grave.png`)}
-                        alt={`monster ${monsterId} died`}
-                        style={{
-                            ...styles.monsterImg,
-                        }}
-                    />
+            <Grid key={count} item xs={itemSize} sx={styles.monsterContainer}>
+                <img
+                    src={require(`../../../assets/monsters/${monsterId}.gif`)}
+                    alt={`monster ${monsterId}`}
+                    style={{
+                        ...styles.monsterImg,
+                    }}
+                />
                 <Typography sx={styles.monsterName}>{monsterId}</Typography>
-            </div>
-            // </Grid>
+            </Grid>
         );
     };
 
-    const displayFDs = (monsters: string[]) => {
+    const renderArrow = (itemSize: number) => {
+        return (
+            <Grid key={0} item xs={itemSize} sx={styles.monsterContainer}>
+                <img
+                src={require(`../../../assets/arrow.png`)}
+                alt={`arrow`}
+                style={{
+                    ...styles.monsterImg,
+                }}
+                />
+            </Grid>
+        )
+    }
+
+    const displayFDs = () => {
         return ( 
             <div>
+                <Grid key={0} container direction="row" alignItems="stretch" sx={styles.rowContainer}>
                 {matchInfo?.functionalDependencies.map((pair, index)=>{
                     var count = 1;
                     const [LHS, RHS] = pair;
                     const LHSMonsters = [...LHS];
                     const RHSMonsters = [...RHS];
-                    console.log("LHSMonster: " + LHSMonsters);
-                    console.log("RHSMonster: " + RHSMonsters);
 
                     const elements = [];
+                    elements.push(<p>{index+1 + ". "}</p>);
                     for (let i = 0; i < LHSMonsters.length; i++) {
-                        const currMonster = LHSMonsters[i];
-                        const index = monsters.indexOf(currMonster);
-                        elements.push(renderMonster(LHSMonsters[i], index, 2, count));
+                        elements.push(renderMonster(LHSMonsters[i], 0.5, count));
                         count++;
                     }
+                    elements.push(renderArrow(0.5));
                     for (let i = 0; i < RHSMonsters.length; i++) {
-                        const currMonster = RHSMonsters[i];
-                        const index = monsters.indexOf(currMonster);
-                        elements.push(renderMonster(RHSMonsters[i], index, 2, count));
-                        count++
+                        elements.push(renderMonster(RHSMonsters[i], 0.5, count));
+                        count++;
                     }
-                    return elements;
+                    return (
+                    <Grid key={index} container direction="row" spacing={2}>
+                    {elements}
+                    </Grid>)
                 })}
+                </Grid>
             </div>
         )
     }
 
     return (
-        <div style={styles.teamContainer}>
-        <h2>Functional Dependencies</h2>
-        {[...Array(2)].map((_, rowIndex) => (
-            <Grid
-                key={rowIndex}
-                container
-                direction="row"
-                alignItems="stretch"
-                justifyContent={"flex"}
-                sx={styles.rowContainer}
-            >
-                {displayFDs(props.monsters)}
-            </Grid>
-        ))}
+        <div>
+        <p style={{...styles.heading}}>Functional Dependencies</p>
+            {displayFDs()}
     </div>
     )
 }
@@ -88,7 +85,33 @@ const styles: any = {
         position: "relative",
         display: "flex",
         alignItems: "center",
+        margin: "10px",
     },
+    rowContainer: {
+        width: "100%",
+        minHeight: "170px",
+        padding: "20px",
+        margin: "20px",
+    },
+    monsterImg: {
+        width: "100%",
+        height: "100%",
+        minHeight: "40px",
+        objectFit: "contain",
+        imageRendering: "pixelated",
+    },
+    monsterName: {
+        bottom: 0,
+        right: 0,
+        fontWeight: "bold",
+        fontSize: "17px",
+        padding: "5px",
+    },
+    heading: {
+        display: "flex",
+        textAlign: "left",
+        marginLeft: "20px",
+    }
 }
 
 export default React.memo(FunctionalDependencies);
