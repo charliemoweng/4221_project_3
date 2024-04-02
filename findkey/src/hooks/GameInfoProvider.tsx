@@ -150,7 +150,7 @@ const GameInfoProvider = ({ children }: Props) => {
         // Difficulty >= 1: Additional FDs without introducing new candidate keys
         if (difficulty >= 1) {
             const nonCandidateAttributes: string[] = attributes.filter(attr => !candidateKeyAttributes.has(attr));
-            for (let i = 0; i < numAttributes; i++) {
+            for (let i = 0; i < 2; i++) {
             const determinantSize: number = Math.floor(Math.random() * (attributes.length - 1)) + 1;
             // Ensure at least one non-candidate attribute in the determinant to prevent new candidate keys
             const determinant: string[] = [...candidateKeyAttributes].sort(() => 0.5 - Math.random()).slice(0, determinantSize - 1);
