@@ -44,28 +44,42 @@ const FunctionalDependencies = () => {
     const displayFDs = () => {
         return ( 
             <div>
-                <Grid key={0} container direction="row" alignItems="stretch" sx={styles.rowContainer}>
+                <Grid key="fd-grid" container direction="row" alignItems="stretch" sx={styles.rowContainer}>
                 {matchInfo?.functionalDependencies.map((pair, index)=>{
-                    var count = 1;
                     const [LHS, RHS] = pair;
                     const LHSMonsters = [...LHS];
                     const RHSMonsters = [...RHS];
 
                     const elements = [];
-                    elements.push(<p>{index+1 + ". "}</p>);
-                    for (let i = 0; i < LHSMonsters.length; i++) {
-                        elements.push(renderMonster(LHSMonsters[i], 0.5, count));
-                        count++;
-                    }
-                    elements.push(renderArrow(0.5));
-                    for (let i = 0; i < RHSMonsters.length; i++) {
-                        elements.push(renderMonster(RHSMonsters[i], 0.5, count));
-                        count++;
-                    }
+                    elements.push(<p key={`index-${index}`}>{index + 1 + ". "}</p>);
+
+                    LHSMonsters.forEach((monster, i) => {
+                        elements.push(
+                            <React.Fragment key={`lhs-${index}-${i}`}>
+                              {renderMonster(monster, 0.5, i)}
+                            </React.Fragment>
+                          );
+                    });
+                    
+                    elements.push(
+                        <React.Fragment key={`arrow-${index}`}>
+                          {renderArrow(0.5)}
+                        </React.Fragment>
+                      );
+
+                    RHSMonsters.forEach((monster, i) => {
+                        elements.push(
+                            <React.Fragment key={`rhs-${index}-${i}`}>
+                                {renderMonster(monster, 0.5, LHSMonsters.length + i)}
+                            </React.Fragment>
+                        );
+                    });
+
                     return (
-                    <Grid key={index} container direction="row" spacing={2}>
-                    {elements}
-                    </Grid>)
+                        <Grid key={index} container direction="row" spacing={2}>
+                            {elements}
+                        </Grid>
+                    )
                 })}
                 </Grid>
             </div>
