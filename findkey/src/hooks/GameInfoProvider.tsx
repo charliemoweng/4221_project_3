@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import functionalDependencies from "../sections/arena_section/components/functionalDependencies";
 
 export interface MatchInfo {
     // no of teams (candidates keys) successfully found
@@ -71,13 +72,7 @@ const GameInfoProvider = ({ children }: Props) => {
     const fightOpponent = (team: Set<string>): Set<string> => {
         if (matchInfo == null) return new Set<string>();
 
-        // TODO: call function to get closure
-        const tempClosure = new Set<string>();
-        tempClosure.add("A");
-        tempClosure.add("B");
-        tempClosure.add("C");
-        tempClosure.add("F");
-
+        const tempClosure = getClosure(team);
         const teamStr = Array.from(team).join("");
         const closureStr = Array.from(tempClosure).join("");
 
@@ -99,6 +94,77 @@ const GameInfoProvider = ({ children }: Props) => {
     };
 
     /**
+     * Get the closure of a set of attributes
+     */
+    const getClosure = (team: Set<string>): Set<string> => {
+        let closure: Set<string> = new Set(team);
+        let added: boolean = true;
+
+        while (added) {
+            added = false;
+            matchInfo?.functionalDependencies.forEach((fd) => {
+                const lhs = new Set(fd[0].split(''));
+                const rhs = new Set(fd[1].split(''));
+
+                // Check if LHS is a subset of the closure
+                const lhsIsSubset = Array.from(lhs).every(attr => closure.has(attr));
+                // Check if any part of RHS is not in closure
+                const rhsIsNotSubset = Array.from(rhs).some(attr => !closure.has(attr));
+
+                if (lhsIsSubset && rhsIsNotSubset) {
+                    rhs.forEach(attr => closure.add(attr));
+                    added = true;
+                }
+            });
+        }
+
+        return closure;
+    }
+
+    /**
+     * Generate FDs based on difficulty
+     */
+    const generateFDs = (numAttributes: number, difficulty: number, ): [string, string][] => {
+        // Generate Attributes
+        const attributes = Array.from({ length: numAttributes }, (_, i) => String.fromCharCode(65 + i));
+
+        // Generate Candidate Keys
+        const candidateKeySize: number = Math.floor(Math.random() * (Math.max(2, attributes.length / 2) - 1)) + 1;
+        const shuffledAttributes: string[] = [...attributes].sort(() => 0.5 - Math.random());
+        const candidateKeyAttributes: Set<string> = new Set(shuffledAttributes.slice(0, candidateKeySize));
+
+        console.log("Candidate Key: ", candidateKeyAttributes);
+        console.log("Difficulty: ", difficulty)
+
+        // Generate FDs
+        let fds: Set<[string, string]> = new Set();
+
+        // Difficulty >= 0: Basic FDs where non-candidate key attributes depend on the candidate key or part of it
+        if (difficulty >= 0) {
+            attributes.filter(attr => !candidateKeyAttributes.has(attr)).forEach(nonCandidate => {
+            const subsetCandidateKey: string[] = [...candidateKeyAttributes].sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * candidateKeySize) + 1);
+            fds.add([subsetCandidateKey.join(''), nonCandidate]);
+            });
+        }
+        
+        // Difficulty >= 1: Additional FDs without introducing new candidate keys
+        if (difficulty >= 1) {
+            const nonCandidateAttributes: string[] = attributes.filter(attr => !candidateKeyAttributes.has(attr));
+            for (let i = 0; i < numAttributes; i++) {
+            const determinantSize: number = Math.floor(Math.random() * (attributes.length - 1)) + 1;
+            // Ensure at least one non-candidate attribute in the determinant to prevent new candidate keys
+            const determinant: string[] = [...candidateKeyAttributes].sort(() => 0.5 - Math.random()).slice(0, determinantSize - 1);
+            determinant.push(nonCandidateAttributes[Math.floor(Math.random() * nonCandidateAttributes.length)]);
+            const dependents: string[] = attributes.filter(attr => !determinant.includes(attr) && !candidateKeyAttributes.has(attr));
+            fds.add([determinant.join(''), dependents[Math.floor(Math.random() * dependents.length)]]);
+            }
+        }
+
+        const fdList: Array<[string, string]> = Array.from(fds);
+
+        return fdList;
+    }
+    /**
      * handle new round is in a seperate function from fightOpponent for UI animation reasons
      * Allows for components to only re-render when currRoundNumber is updated in the useEffect hook
      *
@@ -115,15 +181,10 @@ const GameInfoProvider = ({ children }: Props) => {
 
     // for resetting game or starting
     const handleNewMatch = (difficulty: number) => {
-        // TODO: call the functions to generate FDs and no of attributes here based on difficulty
-
-        // TODO: replace hardcoded example with generated FDs
-        const tempFDs = new Array<[string, string]>();
-        tempFDs.push(["A", "BC"]);
-        tempFDs.push(["BC", "D"]);
-        tempFDs.push(["D", "EF"]);
-        tempFDs.push(["H", "GIJ"]);
+        // TODO: Call a function to set noOfAttributes based on difficulty
         const noAttributes = 10;
+
+        const tempFDs = generateFDs(noAttributes, difficulty);
 
         setMatchInfo({
             candidateNoOfKeysFound: 0,

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
     GameInfoContext,
     GameInfoContextType,
@@ -32,7 +32,7 @@ const ArenaSection = (props: Props) => {
     );
     const [isWinRound, setIsWinRound] = useState<boolean>(false);
 
-    const { matchInfo, wasTeamUsedBefore, fightOpponent, handleNewRound } =
+    const { matchInfo, wasTeamUsedBefore, fightOpponent, handleNewRound, handleNewMatch } =
         React.useContext(GameInfoContext) as GameInfoContextType;
 
     const addTeamMember = (id: string) => {
@@ -67,16 +67,36 @@ const ArenaSection = (props: Props) => {
         setTimeout(() => {
             setShowFightCloud(false);
             // get closure and whether all the enemies were wiped out
-            setEnemiesDead(fightOpponent(currTeam));
-
-            // if enemies dead size is the number of attributes, it means the enemy team got wiped, player won
-            setIsWinRound(enemiesDead.size === matchInfo?.noOfAttributes);
-            setAlertState(isWinRound ? AlertStates.WIN : AlertStates.LOSE);
-
-            //change fight button to next round button
-            setIsSelectingTeam(false);
+            setEnemiesDead(fightOpponent(currTeam))
         }, FIGHT_CLOUD_ANIM_TIME);
     };
+
+    const startNewGame = () => {
+        // reset states
+        setCurrTeam(new Set<string>());
+        setEnemiesDead(new Set<string>());
+        setIsSelectingTeam(true);
+        setIsWinRound(false);
+        setAlertState(AlertStates.NONE);
+
+        // start new game
+        handleNewMatch(0);
+    };
+
+    useEffect(() => {
+        if (enemiesDead.size != 0) {
+            if (enemiesDead.size === matchInfo?.noOfAttributes) {
+                setIsWinRound(true);
+                setAlertState(AlertStates.WIN);
+            } else {
+                setIsWinRound(false);
+                setAlertState(AlertStates.LOSE);
+                // Change fight button to next round button
+                setIsSelectingTeam(false);
+            }
+            
+        }
+    }, [enemiesDead]); 
 
     const startNextRound = () => {
         // reset states
@@ -195,7 +215,16 @@ const ArenaSection = (props: Props) => {
             </div>
             <div style={styles.selectionContainer}>
                 {renderMonsterSelectionSection}
-                {isSelectingTeam ? (
+                {alertState === AlertStates.WIN ?
+                    <Button
+                        variant="contained"
+                        onClick={startNewGame}
+                        sx={[styles.nextRoundButton, styles.button]}
+                    >
+                        <GiNextButton />
+                        New Game
+                    </Button>
+                : isSelectingTeam ? (
                     <Button
                         variant="contained"
                         onClick={handleFight}

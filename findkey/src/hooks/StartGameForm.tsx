@@ -9,7 +9,7 @@ interface StartGameFormProps {
   }
 
 const StartGameForm: React.FC<StartGameFormProps> = ({isSubmitted, setSubmitted}) => {
-    const [difficulty, setDifficulty] = useState('1');
+    const [difficulty, setDifficulty] = useState('0');
     const { handleNewMatch } = React.useContext(GameInfoContext) as GameInfoContextType;
 
     function handleSubmit(event: { preventDefault: () => void; }) {
@@ -26,6 +26,7 @@ const StartGameForm: React.FC<StartGameFormProps> = ({isSubmitted, setSubmitted}
                     className="select"
                     value={difficulty} 
                     onChange={e=>setDifficulty(e.target.value)}>
+            <MenuItem value="0">Very Easy</MenuItem>
             <MenuItem value="1">Easy</MenuItem>
             <MenuItem value="2">Medium</MenuItem>
             <MenuItem value="3">Hard</MenuItem>

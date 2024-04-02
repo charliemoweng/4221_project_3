@@ -75,6 +75,7 @@ const FunctionalDependencies = () => {
     return (
         <div>
         <p style={{...styles.heading}}>Functional Dependencies</p>
+        <p style={{...styles.heading}}>Number of Monsters Used: {matchInfo?.currMonstersUsed}</p>
             {displayFDs()}
     </div>
     )
