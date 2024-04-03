@@ -6,9 +6,9 @@ type Props = {
 };
 
 const Closure = (props: Props) => {
-    const MAX_HEIGHT = "32px";
-    const MONSTER_HEIGHT = "25px";
-    const POINTER_HEIGHT = "20px";
+    const MAX_HEIGHT = "36px";
+    const MONSTER_HEIGHT = "30px";
+    const POINTER_HEIGHT = "25px";
 
     const renderMonster = (monsterId: string, index: number) => {
         return (
@@ -35,6 +35,7 @@ const Closure = (props: Props) => {
                     style={{
                         ...styles.img,
                         height: MAX_HEIGHT,
+                        margin: "0px 5px",
                     }}
                 />
             </Box>

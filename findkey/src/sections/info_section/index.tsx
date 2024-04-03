@@ -36,7 +36,12 @@ const FunctionalDependencies = (props: Props) => {
                     Array.from(matchInfo.closuresOfSetsUsed).map(
                         ([key, value]) => {
                             return (
-                                <Box sx={{ marginRight: "50px" }}>
+                                <Box
+                                    sx={{
+                                        marginRight: "50px",
+                                        marginBottom: "35px",
+                                    }}
+                                >
                                     <Closure closure={[key, value]} />
                                 </Box>
                             );
@@ -144,6 +149,7 @@ const styles: any = {
     },
     closureSectionContainer: {
         marginTop: "30px",
+        minHeight: "300px",
     },
     header: {
         display: "flex",
@@ -151,7 +157,6 @@ const styles: any = {
         alignItems: "center",
     },
     closureContainer: {
-        minHeight: "128px",
         display: "flex",
         width: "100%",
         flexWrap: "wrap",
