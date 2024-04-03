@@ -2,19 +2,19 @@ import React from "react";
 import { Typography, Box } from "@mui/material";
 
 type Props = {
-    functionalDependency: [string, string];
+    closure: [string, string];
 };
 
-const FunctionalDependency = (props: Props) => {
-    const MAX_HEIGHT = "70px";
-    const MONSTER_HEIGHT = "50px";
-    const POINTER_HEIGHT = "40px";
+const Closure = (props: Props) => {
+    const MAX_HEIGHT = "32px";
+    const MONSTER_HEIGHT = "25px";
+    const POINTER_HEIGHT = "20px";
 
     const renderMonster = (monsterId: string, index: number) => {
         return (
             <Box sx={styles.monsterContainer} key={index}>
                 <img
-                    src={require(`../../../assets/monsters/${monsterId}.gif`)}
+                    src={require(`../../../assets/monsters/${monsterId}.png`)}
                     alt={`monster ${monsterId}`}
                     style={{
                         ...styles.img,
@@ -30,7 +30,7 @@ const FunctionalDependency = (props: Props) => {
         return (
             <Box>
                 <img
-                    src={require(`../../../assets/sword.png`)}
+                    src={require(`../../../assets/sword_sprite.png`)}
                     alt={`vs sword`}
                     style={{
                         ...styles.img,
@@ -42,7 +42,7 @@ const FunctionalDependency = (props: Props) => {
     };
 
     const displayFD = () => {
-        const [LHS, RHS] = props.functionalDependency;
+        const [LHS, RHS] = props.closure;
         const LHSMonsters = [...LHS];
         const RHSMonsters = [...RHS];
 
@@ -81,7 +81,7 @@ const styles: any = {
         position: "relative",
         display: "flex",
         height: "100%",
-        padding: "0px 10px",
+        padding: "0px 3px",
         alignItems: "center",
     },
     img: {
@@ -93,9 +93,9 @@ const styles: any = {
         bottom: 0,
         right: 0,
         fontWeight: "bold",
-        fontSize: "15px",
+        fontSize: "8px",
         position: "absolute",
     },
 };
 
-export default React.memo(FunctionalDependency);
+export default React.memo(Closure);
