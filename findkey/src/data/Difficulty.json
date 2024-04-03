@@ -1,0 +1,64 @@
+{
+  "difficulty_levels": [
+    {
+      "name": "Very Easy",
+      "index": 1,
+      "rounds": 10,
+      "max_attributes": 5,
+      "min_attributes": 5,
+      "max_FDs": 4,
+      "min_FDs": 2,
+      "candidate_keys": 1,
+      "redundant": true,
+      "cyclic": false
+    },
+    {
+      "name": "Easy",
+      "index": 2,
+      "rounds": 5,
+      "max_attributes": 7,
+      "min_attributes": 5,
+      "max_FDs": 6,
+      "min_FDs": 5,
+      "candidate_keys": 1,
+      "redundant": true,
+      "cyclic": false
+    },
+    {
+      "name": "Medium",
+      "index": 3,
+      "rounds": 5,
+      "max_attributes": 9,
+      "min_attributes": 7,
+      "max_FDs": 7,
+      "min_FDs": 6,
+      "candidate_keys": 1,
+      "redundant": true,
+      "cyclic": true
+    },
+    {
+      "name": "Hard",
+      "index": 4,
+      "rounds": 5,
+      "max_attributes": 10,
+      "min_attributes": 8,
+      "max_FDs": 8,
+      "min_FDs": 7,
+      "candidate_keys": 2,
+      "redundant": true,
+      "cyclic": true
+    },
+    {
+      "name": "Very Hard",
+      "index": 5,
+      "rounds": 3,
+      "max_attributes": 10,
+      "min_attributes": 10,
+      "max_FDs": 10,
+      "min_FDs": 8,
+      "candidate_keys": 3,
+      "redundant": true,
+      "cyclic": true
+    }
+  ]
+}

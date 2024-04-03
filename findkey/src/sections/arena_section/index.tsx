@@ -84,7 +84,7 @@ const ArenaSection = (props: Props) => {
     };
 
     useEffect(() => {
-        if (enemiesDead.size != 0) {
+        if (enemiesDead.size !== 0) {
             if (enemiesDead.size === matchInfo?.noOfAttributes) {
                 setIsWinRound(true);
                 setAlertState(AlertStates.WIN);
