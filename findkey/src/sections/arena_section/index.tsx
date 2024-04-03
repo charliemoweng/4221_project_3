@@ -197,6 +197,7 @@ const ArenaSection = (props: Props) => {
 
     return (
         <div style={styles.container}>
+            <div style={styles.backgroundImg} />
             <div style={styles.arenaContainer}>
                 <Team
                     teamSize={matchInfo ? matchInfo.noOfAttributes : 0}
@@ -262,6 +263,17 @@ const styles: any = {
         height: "auto",
         position: "relative",
     },
+    backgroundImg: {
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        backgroundImage: `url(${require("../../assets/arenaBackground.avif")})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        filter: "blur(3px)",
+        zIndex: -1,
+        backgroundPosition: "50% 105%",
+    },
     arenaContainer: {
         display: "flex",
         direction: "row",
@@ -307,6 +319,7 @@ const styles: any = {
     popup: {
         marginTop: "30px",
         width: "800px",
+        minHeight: "100px",
     },
     alert: {
         display: "flex",
