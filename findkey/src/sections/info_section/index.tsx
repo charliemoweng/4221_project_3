@@ -10,6 +10,8 @@ import { FaInfoCircle } from "react-icons/fa";
 
 type Props = {};
 
+const FD_MAX_ATTRIBUTES_AMT = 6;
+
 const FunctionalDependencies = (props: Props) => {
     const { matchInfo } = React.useContext(
         GameInfoContext
@@ -19,8 +21,18 @@ const FunctionalDependencies = (props: Props) => {
         return (
             <Grid container>
                 {matchInfo?.functionalDependencies.map((pair, index) => {
+                    const [LHS, RHS] = pair;
+                    const size = LHS.length + RHS.length;
+                    const isTooBig = size > FD_MAX_ATTRIBUTES_AMT;
+
                     return (
-                        <Grid item key={index} xs={12} sm={6} md={4}>
+                        <Grid
+                            item
+                            key={index}
+                            xs={12}
+                            sm={isTooBig ? 12 : 6}
+                            md={isTooBig ? 8 : 4}
+                        >
                             <FunctionalDependency functionalDependency={pair} />
                         </Grid>
                     );
@@ -57,7 +69,7 @@ const FunctionalDependencies = (props: Props) => {
         );
     };
 
-    const displayTooltip = (innerTyping: any) => {
+    const displayTooltip = (innerTyping: any, children: any) => {
         return (
             <Tooltip
                 title={innerTyping}
@@ -74,10 +86,17 @@ const FunctionalDependencies = (props: Props) => {
                     },
                 }}
             >
-                <IconButton>
-                    <FaInfoCircle />
-                </IconButton>
+                {children}
             </Tooltip>
+        );
+    };
+
+    const displayTooltipIcon = (innerTyping: any) => {
+        return displayTooltip(
+            innerTyping,
+            <IconButton>
+                <FaInfoCircle />
+            </IconButton>
         );
     };
 
@@ -92,7 +111,7 @@ const FunctionalDependencies = (props: Props) => {
                     >
                         <b>Monster Matchups</b>
                     </Typography>
-                    {displayTooltip(
+                    {displayTooltipIcon(
                         <Typography
                             style={{
                                 fontSize: "13px",
@@ -118,7 +137,7 @@ const FunctionalDependencies = (props: Props) => {
                     <Typography variant="h5" sx={{ ...styles.heading }}>
                         <b>Previous teams</b>
                     </Typography>
-                    {displayTooltip(
+                    {displayTooltipIcon(
                         <Typography
                             style={{
                                 fontSize: "13px",
@@ -138,45 +157,54 @@ const FunctionalDependencies = (props: Props) => {
     const displayGameStates = () => {
         return (
             <div style={styles.gameStateContainer}>
-                <Typography variant="h6">
-                    <b>Round: </b>
-                    {matchInfo?.currRoundNumber} / {matchInfo?.totalRounds}
-                </Typography>
-                <Typography variant="h6">
-                    <b>Monsters Used: </b>
-                    {matchInfo?.currMonstersUsed}
-                </Typography>
-                <Tooltip
-                    title={
-                        <Typography
-                            style={{
-                                fontSize: "13px",
-                                textAlign: "center",
-                            }}
-                        >
-                            You need to find smallest possible subsets that can
-                            defeat the enemy team for it to be counted.
-                        </Typography>
-                    }
-                    slotProps={{
-                        popper: {
-                            modifiers: [
-                                {
-                                    name: "offset",
-                                    options: {
-                                        offset: [0, -14],
-                                    },
-                                },
-                            ],
-                        },
-                    }}
-                >
+                {displayTooltip(
+                    <Typography
+                        style={{
+                            fontSize: "13px",
+                            textAlign: "center",
+                        }}
+                    >
+                        Rounds you left. If you used all rounds before finding
+                        all combinations, you lose.
+                    </Typography>,
+                    <Typography variant="h6">
+                        <b>Round: </b>
+                        {matchInfo?.currRoundNumber} / {matchInfo?.totalRounds}
+                    </Typography>
+                )}
+
+                {displayTooltip(
+                    <Typography
+                        style={{
+                            fontSize: "13px",
+                            textAlign: "center",
+                        }}
+                    >
+                        Total monsters used throughout the rounds. Try to keep
+                        this number small!
+                    </Typography>,
+                    <Typography variant="h6">
+                        <b>Monsters Used: </b>
+                        {matchInfo?.currMonstersUsed}
+                    </Typography>
+                )}
+
+                {displayTooltip(
+                    <Typography
+                        style={{
+                            fontSize: "13px",
+                            textAlign: "center",
+                        }}
+                    >
+                        You need to find smallest possible subsets that can
+                        defeat the enemy team for it to be counted.
+                    </Typography>,
                     <Typography variant="h6">
                         <b>Team Combinations Found: </b>
                         {matchInfo?.candidateNoOfKeysFound} /{" "}
                         {matchInfo?.totalNoOfCandidateKeys}
                     </Typography>
-                </Tooltip>
+                )}
             </div>
         );
     };

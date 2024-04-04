@@ -557,6 +557,12 @@ const GameInfoProvider = ({ children }: Props) => {
 
         // Generate functional dependencies based on difficulty
         const tempFDs = generateFDs(noAttributes, difficultyInfo);
+        // arrange from smaller FDs to bigger
+        tempFDs.sort((a, b) => {
+            const lengthA = a[0].length + a[1].length;
+            const lengthB = b[0].length + b[1].length;
+            return lengthA - lengthB;
+        });
 
         setMatchInfo({
             totalNoOfCandidateKeys: difficultyInfo.candidate_keys,
