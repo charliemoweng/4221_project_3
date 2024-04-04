@@ -96,7 +96,7 @@ const Rules = () => {
                     </Typography>
                     <Typography align="left">
                         If there is a valid subset within your current team you
-                        could have ysed to wipe the enemy's team, your current
+                        could have used to wipe the enemy's team, your current
                         team would not be counted as a valid combination.
                         <br />
                         You must find the smallest possible subset to defeat the
