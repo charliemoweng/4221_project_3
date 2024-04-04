@@ -142,17 +142,41 @@ const FunctionalDependencies = (props: Props) => {
                     <b>Round: </b>
                     {matchInfo?.currRoundNumber} / {matchInfo?.totalRounds}
                 </Typography>
-
                 <Typography variant="h6">
                     <b>Monsters Used: </b>
                     {matchInfo?.currMonstersUsed}
                 </Typography>
-
-                <Typography variant="h6">
-                    <b>Team Combinations Found: </b>
-                    {matchInfo?.candidateNoOfKeysFound} /{" "}
-                    {matchInfo?.totalNoOfCandidateKeys}
-                </Typography>
+                <Tooltip
+                    title={
+                        <Typography
+                            style={{
+                                fontSize: "13px",
+                                textAlign: "center",
+                            }}
+                        >
+                            You need to find smallest possible subsets that can
+                            defeat the enemy team for it to be counted.
+                        </Typography>
+                    }
+                    slotProps={{
+                        popper: {
+                            modifiers: [
+                                {
+                                    name: "offset",
+                                    options: {
+                                        offset: [0, -14],
+                                    },
+                                },
+                            ],
+                        },
+                    }}
+                >
+                    <Typography variant="h6">
+                        <b>Team Combinations Found: </b>
+                        {matchInfo?.candidateNoOfKeysFound} /{" "}
+                        {matchInfo?.totalNoOfCandidateKeys}
+                    </Typography>
+                </Tooltip>
             </div>
         );
     };
