@@ -6,9 +6,11 @@ type Props = {
     maxHeight?: string;
     monsterHeight?: string;
     pointerHeight?: string;
+    arrowHeight?: string;
 };
 
 const MAX_HEIGHT = "55px";
+const ARROW_HEIGHT = "30px";
 const MONSTER_HEIGHT = "40px";
 const POINTER_HEIGHT = "19px";
 
@@ -16,6 +18,7 @@ const FunctionalDependency = ({
     maxHeight = MAX_HEIGHT,
     monsterHeight = MONSTER_HEIGHT,
     pointerHeight = POINTER_HEIGHT,
+    arrowHeight = ARROW_HEIGHT,
     ...props
 }: Props) => {
     const renderMonster = (monsterId: string, index: number) => {
@@ -42,7 +45,8 @@ const FunctionalDependency = ({
                     alt={`vs sword`}
                     style={{
                         ...styles.img,
-                        height: maxHeight,
+                        height: arrowHeight,
+                        margin: "0px 5px",
                     }}
                 />
             </Box>

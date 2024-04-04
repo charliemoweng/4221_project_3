@@ -46,7 +46,8 @@ const Closure = ({
                     style={{
                         ...styles.img,
                         height: MAX_HEIGHT,
-                        margin: "0px 5px",
+                        margin: "0px 7px",
+                        rotate: "-43deg",
                     }}
                 />
             </Box>
