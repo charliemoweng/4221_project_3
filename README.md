@@ -7,3 +7,9 @@ cd findkey
 npm install
 npm start
 ```
+
+To deploy:
+
+```
+npm run build
+```

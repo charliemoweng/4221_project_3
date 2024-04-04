@@ -63,8 +63,32 @@ const Rules = () => {
                         too.
                     </Typography>
                     <br />
-                    <Closure closure={["AB", "C"]} showPointer={false} />
-                    <Closure closure={["C", "D"]} showPointer={false} />
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            // justifyContent: "center",
+                            width: "100%",
+                        }}
+                    >
+                        <div>
+                            <Closure
+                                closure={["AB", "C"]}
+                                showPointer={false}
+                            />
+                            <Closure closure={["C", "D"]} showPointer={false} />
+                        </div>
+                        <img
+                            src={require(`../../assets/arrow.png`)}
+                            alt={`dependency arrow`}
+                            style={{
+                                width: "50px",
+                                height: "auto",
+                                margin: "0px 40px",
+                            }}
+                        />
+                        <Closure closure={["AB", "D"]} showPointer={false} />
+                    </div>
                 </div>
                 <div style={styles.ruleBox}>
                     <Typography sx={styles.ruleSubHeader}>4. Goals</Typography>
