@@ -3,13 +3,23 @@ import { Typography, Box } from "@mui/material";
 
 type Props = {
     closure: [string, string];
+    maxHeight?: string;
+    monsterHeight?: string;
+    pointerHeight?: string;
+    showPointer?: boolean;
 };
 
-const Closure = (props: Props) => {
-    const MAX_HEIGHT = "36px";
-    const MONSTER_HEIGHT = "30px";
-    const POINTER_HEIGHT = "25px";
+const MAX_HEIGHT = "36px";
+const MONSTER_HEIGHT = "30px";
+const POINTER_HEIGHT = "25px";
 
+const Closure = ({
+    maxHeight = MAX_HEIGHT,
+    monsterHeight = MONSTER_HEIGHT,
+    pointerHeight = POINTER_HEIGHT,
+    showPointer = true,
+    ...props
+}: Props) => {
     const renderMonster = (monsterId: string, index: number) => {
         return (
             <Box sx={styles.monsterContainer} key={index}>
@@ -49,14 +59,16 @@ const Closure = (props: Props) => {
 
         return (
             <Box sx={[styles.mainContainer, { height: MAX_HEIGHT }]}>
-                <img
-                    src={require(`../../../assets/Pointers/pokeball.png`)}
-                    alt={`pokeball icon`}
-                    style={{
-                        ...styles.img,
-                        height: POINTER_HEIGHT,
-                    }}
-                />
+                {showPointer && (
+                    <img
+                        src={require(`../../../assets/Pointers/pokeball.png`)}
+                        alt={`pokeball icon`}
+                        style={{
+                            ...styles.img,
+                            height: POINTER_HEIGHT,
+                        }}
+                    />
+                )}
                 {LHSMonsters.map((monster, i) => {
                     return renderMonster(monster, i);
                 })}

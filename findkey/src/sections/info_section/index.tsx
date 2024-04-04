@@ -93,8 +93,8 @@ const FunctionalDependencies = (props: Props) => {
                                 textAlign: "center",
                             }}
                         >
-                            Matchup of monsters on the <b>left</b> will defeat
-                            the ones on the <b>right</b>.
+                            Matchup of monsters on the <b>left</b> will be
+                            stronger than the ones on the <b>right</b>.
                             <br />
                             Find the right team to defeat all!
                         </Typography>

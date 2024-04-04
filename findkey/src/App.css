@@ -45,6 +45,8 @@
   display: inline-flex;
   justify-content: center;
   width: 80%;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .rules {
@@ -53,7 +55,7 @@
 
 .form {
   display: flex;
-  padding: 30px;
+  margin-left: 40px;
   width: 50%;
 }
 

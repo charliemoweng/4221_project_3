@@ -3,13 +3,21 @@ import { Typography, Box } from "@mui/material";
 
 type Props = {
     functionalDependency: [string, string];
+    maxHeight?: string;
+    monsterHeight?: string;
+    pointerHeight?: string;
 };
 
-const FunctionalDependency = (props: Props) => {
-    const MAX_HEIGHT = "55px";
-    const MONSTER_HEIGHT = "40px";
-    const POINTER_HEIGHT = "40px";
+const MAX_HEIGHT = "55px";
+const MONSTER_HEIGHT = "40px";
+const POINTER_HEIGHT = "40px";
 
+const FunctionalDependency = ({
+    maxHeight = MAX_HEIGHT,
+    monsterHeight = MONSTER_HEIGHT,
+    pointerHeight = POINTER_HEIGHT,
+    ...props
+}: Props) => {
     const renderMonster = (monsterId: string, index: number) => {
         return (
             <Box sx={styles.monsterContainer} key={index}>
@@ -18,7 +26,7 @@ const FunctionalDependency = (props: Props) => {
                     alt={`monster ${monsterId}`}
                     style={{
                         ...styles.img,
-                        height: MONSTER_HEIGHT,
+                        height: monsterHeight,
                     }}
                 />
                 <Typography sx={styles.monsterName}>{monsterId}</Typography>
@@ -34,7 +42,7 @@ const FunctionalDependency = (props: Props) => {
                     alt={`vs sword`}
                     style={{
                         ...styles.img,
-                        height: MAX_HEIGHT,
+                        height: maxHeight,
                     }}
                 />
             </Box>
@@ -53,7 +61,7 @@ const FunctionalDependency = (props: Props) => {
                     alt={`pokeball icon`}
                     style={{
                         ...styles.img,
-                        height: POINTER_HEIGHT,
+                        height: pointerHeight,
                     }}
                 />
                 {LHSMonsters.map((monster, i) => {
