@@ -27,7 +27,7 @@ const Rules = () => {
             <div style={styles.ruleContainer}>
                 <div style={styles.ruleBox}>
                     <Typography sx={styles.ruleSubHeader}>
-                        1. Strength Reprensetation
+                        1. Strength Representation
                     </Typography>
 
                     <Typography align="left">
@@ -55,7 +55,7 @@ const Rules = () => {
                         3. Transitivity
                     </Typography>
                     <Typography align="left">
-                        The strength of a monster can propogate.
+                        The strength of a monster can propagate.
                         <br />
                         <br />
                         For example, monster A and B can defeat C. C is able to
