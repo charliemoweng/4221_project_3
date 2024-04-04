@@ -41,6 +41,7 @@ const FunctionalDependencies = (props: Props) => {
                                         marginRight: "50px",
                                         marginBottom: "35px",
                                     }}
+                                    key={key}
                                 >
                                     <Closure
                                         closure={[key, value]}

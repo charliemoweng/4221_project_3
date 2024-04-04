@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import {
     GameInfoContext,
     GameInfoContextType,
+    SetStates,
 } from "../../hooks/GameInfoProvider";
 import { Button, Alert } from "@mui/material";
 import MonsterSelectionButton from "./components/monsterSelectionButton";
@@ -17,6 +18,8 @@ enum AlertStates {
     TEAM_PICKED_BEFORE,
     WIN,
     LOSE,
+    WIN_BUT_CANDIDATE_KEY_IS_SUPERSET,
+    WIN_CANDIDATE_KEY_IS_SUBSET,
 }
 
 enum GameStates {
@@ -38,6 +41,8 @@ const ArenaSection = (props: Props) => {
     const [enemiesDead, setEnemiesDead] = useState<Set<string>>(
         new Set<string>()
     );
+    // to keep track of whether our team is subset/superset/or exact set of existing candidate keys
+    const [teamState, setTeamState] = useState<SetStates>(SetStates.NOT_SET);
     const [currGameState, setCurrGameState] = useState<GameStates>(
         GameStates.SELECT_TEAM
     );
@@ -82,7 +87,9 @@ const ArenaSection = (props: Props) => {
         setTimeout(() => {
             setShowFightCloud(false);
             // get closure and whether all the enemies were wiped out
-            setEnemiesDead(fightOpponent(currTeam));
+            const { closure, state } = fightOpponent(currTeam);
+            setEnemiesDead(closure);
+            setTeamState(state);
         }, FIGHT_CLOUD_ANIM_TIME);
     };
 
@@ -100,13 +107,25 @@ const ArenaSection = (props: Props) => {
     useEffect(() => {
         if (matchInfo === null || enemiesDead.size === 0) return;
         // check round
-        if (enemiesDead.size === matchInfo.noOfAttributes) {
-            // check if manage to win CURR ROUND (not the curr match)
+        if (enemiesDead.size === matchInfo?.noOfAttributes) {
             setCurrGameState(GameStates.WIN_ROUND);
-            setAlertState(AlertStates.WIN);
+            console.log(teamState);
+
+            // check if manage to win CURR ROUND (not the curr match)
+            if (teamState === SetStates.SUPER_SET) {
+                setAlertState(AlertStates.WIN_BUT_CANDIDATE_KEY_IS_SUPERSET);
+            } else if (teamState === SetStates.SUB_SET) {
+                setAlertState(AlertStates.WIN_CANDIDATE_KEY_IS_SUBSET);
+            } else {
+                setAlertState(AlertStates.WIN);
+            }
         } else {
             setCurrGameState(GameStates.LOSE_ROUND);
             setAlertState(AlertStates.LOSE);
+        }
+
+        if (matchInfo === null) {
+            return;
         }
 
         // check win lose condition for the entire match
@@ -119,7 +138,7 @@ const ArenaSection = (props: Props) => {
             setCurrGameState(GameStates.LOSE_MATCH);
             handleNewRound();
         }
-    }, [enemiesDead]);
+    }, [enemiesDead, teamState]);
 
     const startNextRound = () => {
         // reset states
@@ -164,8 +183,24 @@ const ArenaSection = (props: Props) => {
                         Successfully defeated the enemy's team!
                     </Alert>
                 )}
-                {alertState === AlertStates.LOSE && (
+                {alertState ===
+                    AlertStates.WIN_BUT_CANDIDATE_KEY_IS_SUPERSET && (
                     <Alert severity="warning" sx={styles.alert}>
+                        You defeated the enemy team. But there's a smaller set
+                        of monsters within your current team you could have
+                        used. This is not counted as a combination found.
+                    </Alert>
+                )}
+                {alertState === AlertStates.WIN_CANDIDATE_KEY_IS_SUBSET && (
+                    <Alert severity="warning" sx={styles.alert}>
+                        You defeated the enemy team! However, this combination
+                        is a subset of an existing combination found, they are
+                        counted as the same combination. Great work for finding
+                        a smaller subset though!
+                    </Alert>
+                )}
+                {alertState === AlertStates.LOSE && (
+                    <Alert severity="error" sx={styles.alert}>
                         You were unable to full wipe the enemy's team and lost
                         this round...
                     </Alert>

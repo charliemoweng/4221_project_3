@@ -27,7 +27,7 @@ const Rules = () => {
             <div style={styles.ruleContainer}>
                 <div style={styles.ruleBox}>
                     <Typography sx={styles.ruleSubHeader}>
-                        1. Strength Reprensetation
+                        1. Strength Representation
                     </Typography>
 
                     <Typography align="left">
@@ -91,7 +91,29 @@ const Rules = () => {
                     </div>
                 </div>
                 <div style={styles.ruleBox}>
-                    <Typography sx={styles.ruleSubHeader}>4. Goals</Typography>
+                    <Typography sx={styles.ruleSubHeader}>
+                        4. Using too many monsters
+                    </Typography>
+                    <Typography align="left">
+                        If there is a valid subset within your current team you
+                        could have ysed to wipe the enemy's team, your current
+                        team would not be counted as a valid combination.
+                        <br />
+                        You must find the smallest possible subset to defeat the
+                        enemy team.
+                    </Typography>
+                </div>
+                <div style={styles.ruleBox}>
+                    <Typography sx={styles.ruleSubHeader}>
+                        5. Repetition
+                    </Typography>
+                    <Typography align="left">
+                        You cannot repeat team combinations you have used before
+                        in previous rounds.
+                    </Typography>
+                </div>
+                <div style={styles.ruleBox}>
+                    <Typography sx={styles.ruleSubHeader}>6. Goals</Typography>
                     <Typography align="left">
                         Find all the combinations of monsters that can
                         completely wipe your opponent's team with the least

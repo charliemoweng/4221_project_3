@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import difficultyData from "../data/Difficulty.json";
 
 export interface MatchInfo {
@@ -34,14 +34,24 @@ export interface MatchInfo {
     closuresOfSetsUsed: Map<string, string>;
 }
 
+export enum SetStates {
+    EXACT_SET,
+    SUPER_SET,
+    SUB_SET,
+    NOT_SET,
+}
+
 export type GameInfoContextType = {
     matchInfo: MatchInfo | null;
 
     //Checks if the current set was used before
     wasTeamUsedBefore: (team: Set<string>) => boolean;
 
-    // team selected fights opponent and this function returns the opponents defeated (the closure)
-    fightOpponent: (team: Set<string>) => Set<string>;
+    // team selected fights opponent and this function returns the opponents defeated (the closure) and the team's state to the existing candidate keys (subset/superset of it etc)
+    fightOpponent: (team: Set<string>) => {
+        closure: Set<string>;
+        state: SetStates;
+    };
 
     // go to next round in current match
     handleNewRound: () => void;
@@ -62,6 +72,7 @@ interface Props {
 // provides the context to the component's children
 const GameInfoProvider = ({ children }: Props) => {
     const [matchInfo, setMatchInfo] = useState<MatchInfo | null>(null);
+    const currMatchCandidateKeys = useRef<string[][]>([]);
 
     // check if a team was used before
     const wasTeamUsedBefore = (team: Set<string>): boolean => {
@@ -69,14 +80,45 @@ const GameInfoProvider = ({ children }: Props) => {
         return matchInfo?.closuresOfSetsUsed.get(teamStr) !== undefined;
     };
 
-    const fightOpponent = (team: Set<string>): Set<string> => {
-        if (matchInfo == null) return new Set<string>();
+    const fightOpponent = (
+        team: Set<string>
+    ): { closure: Set<string>; state: SetStates } => {
+        if (matchInfo == null)
+            return {
+                closure: new Set<string>(),
+                state: SetStates.NOT_SET,
+            };
 
         const tempClosure = getClosure(team);
         const teamStr = Array.from(team).sort().join("");
         const closureStr = Array.from(tempClosure).sort().join("");
 
         const isCandidateKey = tempClosure.size === matchInfo.noOfAttributes;
+        const { state, existingCandidateKey } =
+            setTypeAgainstCurrCandidateKeys(team);
+
+        /**
+         * Add new candidate key found that was not part of original generation for tracking
+         */
+        if (state === SetStates.NOT_SET && isCandidateKey) {
+            currMatchCandidateKeys.current.push(Array.from(team));
+        }
+
+        /**
+         * There is even better than a previously inputed answer. Replace the previous answer with this
+         *
+         * IMPT NOTE, there can be cases where a person found the superset of the new candidate key before the subset
+         * this algo deals with this case
+         */
+        if (state === SetStates.SUB_SET && isCandidateKey) {
+            const indexToRemove = currMatchCandidateKeys.current.findIndex(
+                (arr) => arr === existingCandidateKey
+            );
+            if (indexToRemove !== -1) {
+                currMatchCandidateKeys.current.splice(indexToRemove, 1);
+            }
+            currMatchCandidateKeys.current.push(Array.from(team));
+        }
 
         // set new values
         setMatchInfo({
@@ -87,10 +129,68 @@ const GameInfoProvider = ({ children }: Props) => {
                 closureStr
             ),
             candidateNoOfKeysFound:
-                matchInfo.candidateNoOfKeysFound + (isCandidateKey ? 1 : 0),
+                matchInfo.candidateNoOfKeysFound +
+                (state !== SetStates.SUPER_SET && isCandidateKey ? 1 : 0),
         });
 
-        return tempClosure;
+        return { closure: tempClosure, state: state };
+    };
+
+    /**
+     * Give a set and function will return whether it is a superset, subset, existing set or not based on the existing candidate keys
+     *
+     * @param set
+     * @returns {SetStates, string[]} returns the state of the set and which existing candidate key is it a superset/subset/exisitng set of
+     */
+    const setTypeAgainstCurrCandidateKeys = (
+        set: Set<string>
+    ): { state: SetStates; existingCandidateKey: string[] } => {
+        console.log("test");
+        console.log(set);
+        console.log(currMatchCandidateKeys.current);
+        for (const candidateKey of currMatchCandidateKeys.current) {
+            // check if its a superset
+            if (set.size >= candidateKey.length) {
+                let similarities: number = 0;
+                for (const attr of set) {
+                    if (candidateKey.includes(attr)) {
+                        ++similarities;
+                    }
+                }
+
+                if (similarities === candidateKey.length) {
+                    if (set.size === candidateKey.length) {
+                        return {
+                            state: SetStates.EXACT_SET,
+                            existingCandidateKey: candidateKey,
+                        };
+                    }
+                    return {
+                        state: SetStates.SUPER_SET,
+                        existingCandidateKey: candidateKey,
+                    };
+                }
+            }
+
+            // all attributes in current set exists in candidate key + have redundant attributes
+            if (set.size < candidateKey.length) {
+                let similarities: number = 0;
+                for (const attr of candidateKey) {
+                    if (set.has(attr)) {
+                        ++similarities;
+                    }
+                }
+
+                if (similarities === set.size) {
+                    return {
+                        state: SetStates.SUPER_SET,
+                        existingCandidateKey: candidateKey,
+                    };
+                }
+            }
+        }
+
+        return { state: SetStates.NOT_SET, existingCandidateKey: [] };
     };
 
     /**
@@ -352,19 +452,21 @@ const GameInfoProvider = ({ children }: Props) => {
         );
 
         // Generate Candidate Keys
-        let candidateKeys: string[][] = [];
+        currMatchCandidateKeys.current = [];
         for (let i = 0; i < noOfCandidateKeys; i++) {
             // Insert the array as an element
-            candidateKeys.push(generateCandidateKey(attributes, candidateKeys));
+            currMatchCandidateKeys.current.push(
+                generateCandidateKey(attributes, currMatchCandidateKeys.current)
+            );
         }
 
-        console.log("Candidate Key: ", candidateKeys);
+        console.log("Candidate Key: ", currMatchCandidateKeys.current);
         console.log("Difficulty: ", difficultyInfo.name);
 
         // Generate Basic FDs
         let fds: Set<[string, string]> = generateBasicFDs(
             attributes,
-            candidateKeys,
+            currMatchCandidateKeys.current,
             noOfFDs
         );
 
@@ -384,7 +486,7 @@ const GameInfoProvider = ({ children }: Props) => {
         const redundantFDs: number = Math.floor(noOfFDs * 0.2);
 
         if (addRedundantFDs) {
-            candidateKeys.forEach((candidateKey) => {
+            currMatchCandidateKeys.current.forEach((candidateKey) => {
                 const candidateKeyAttributes = new Set(candidateKey);
                 const nonCandidateAttributes: string[] = attributes.filter(
                     (attr) => !candidateKeyAttributes.has(attr)

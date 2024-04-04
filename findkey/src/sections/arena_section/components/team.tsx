@@ -79,8 +79,6 @@ const Team = (props: Props) => {
     const renderTeam = () => {
         const MAX_ROWS = 2;
         const itemSize = 12 / Math.ceil(props.teamSize / 2); // total grid size is 12 unity
-        console.log("size " + props.teamSize);
-        console.log("item " + itemSize);
 
         return (
             <div style={styles.teamContainer}>
