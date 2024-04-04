@@ -5,18 +5,48 @@ import ArenaSection from "./sections/arena_section";
 import { useState } from "react";
 import FunctionalDependencies from "./sections/info_section";
 import Rules from "./sections/rules";
+import { Typography } from "@mui/material";
 
 function App() {
     // Checks whether the form is submitted. If true, the form component is replaced with the game.
     const [isSubmitted, setSubmitted] = useState(false);
 
-    if (isSubmitted) {
-    }
+    const renderTitle = () => {
+        return (
+            <div style={{ marginTop: "20px", marginBottom: "30px" }}>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <img
+                        src={require(`./assets/pikachu1.png`)}
+                        alt={`pikachu`}
+                        style={{ ...styles.titleIcon, transform: "scaleX(-1)" }}
+                    />
+                    <Typography sx={{ fontWeight: "bold", fontSize: "40px" }}>
+                        Monster Dependencies
+                    </Typography>
+                    <img
+                        src={require(`./assets/pikachu3.png`)}
+                        alt={`pikachu`}
+                        style={styles.titleIcon}
+                    />
+                </div>
+                <Typography variant="h6" align="center">
+                    Find the combination of monsters that can wipe your
+                    opponent's team!
+                </Typography>
+            </div>
+        );
+    };
 
     const renderGamePage = () => {
         return (
             <div className="App">
-                <h1>Relax and Find the Key</h1>
+                {renderTitle()}
                 <div>
                     <FunctionalDependencies></FunctionalDependencies>
                     <hr></hr>
@@ -29,11 +59,7 @@ function App() {
     const renderLandingPage = () => {
         return (
             <div className="landing">
-                <h1>Relax and Find the Key</h1>
-                <p>
-                    Find the combination of monsters that can wipe your
-                    opponent's team!
-                </p>
+                {renderTitle()}
                 <div className="rulesForm">
                     <Rules />
                     <div className="form">
@@ -55,5 +81,15 @@ function App() {
         </div>
     );
 }
+
+const styles: any = {
+    titleIcon: {
+        width: "45px",
+        height: "auto",
+        objectFit: "contain",
+        imageRendering: "pixelated",
+        margin: "0px 20px",
+    },
+};
 
 export default App;

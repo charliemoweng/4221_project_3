@@ -7,11 +7,12 @@ type Props = {
     monsterHeight?: string;
     pointerHeight?: string;
     showPointer?: boolean;
+    totalAttributes?: number;
 };
 
 const MAX_HEIGHT = "36px";
 const MONSTER_HEIGHT = "30px";
-const POINTER_HEIGHT = "25px";
+const POINTER_HEIGHT = "18px";
 
 const Closure = ({
     maxHeight = MAX_HEIGHT,
@@ -59,16 +60,28 @@ const Closure = ({
 
         return (
             <Box sx={[styles.mainContainer, { height: MAX_HEIGHT }]}>
-                {showPointer && (
-                    <img
-                        src={require(`../../../assets/Pointers/pokeball.png`)}
-                        alt={`pokeball icon`}
-                        style={{
-                            ...styles.img,
-                            height: POINTER_HEIGHT,
-                        }}
-                    />
-                )}
+                {showPointer &&
+                    (props.totalAttributes === RHSMonsters.length ? (
+                        <img
+                            src={require(`../../../assets/Pointers/master.png`)}
+                            alt={`master ball icon`}
+                            style={{
+                                ...styles.img,
+                                height: POINTER_HEIGHT,
+                                marginRight: "5px",
+                            }}
+                        />
+                    ) : (
+                        <img
+                            src={require(`../../../assets/Pointers/pokeball.png`)}
+                            alt={`pokeball icon`}
+                            style={{
+                                ...styles.img,
+                                height: POINTER_HEIGHT,
+                                marginRight: "5px",
+                            }}
+                        />
+                    ))}
                 {LHSMonsters.map((monster, i) => {
                     return renderMonster(monster, i);
                 })}

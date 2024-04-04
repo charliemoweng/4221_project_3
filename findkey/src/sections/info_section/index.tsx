@@ -42,7 +42,12 @@ const FunctionalDependencies = (props: Props) => {
                                         marginBottom: "35px",
                                     }}
                                 >
-                                    <Closure closure={[key, value]} />
+                                    <Closure
+                                        closure={[key, value]}
+                                        totalAttributes={
+                                            matchInfo.noOfAttributes
+                                        }
+                                    />
                                 </Box>
                             );
                         }

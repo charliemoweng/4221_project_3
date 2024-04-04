@@ -10,7 +10,7 @@ type Props = {
 
 const MAX_HEIGHT = "55px";
 const MONSTER_HEIGHT = "40px";
-const POINTER_HEIGHT = "40px";
+const POINTER_HEIGHT = "19px";
 
 const FunctionalDependency = ({
     maxHeight = MAX_HEIGHT,

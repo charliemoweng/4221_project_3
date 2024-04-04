@@ -1,11 +1,29 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React from "react";
 import { Typography } from "@mui/material";
 import Closure from "../info_section/components/closure";
 
 const Rules = () => {
     return (
         <div style={styles.mainContainer}>
-            <Typography sx={styles.title}>Rules</Typography>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                <img
+                    src={require(`../../assets/mimikyu.png`)}
+                    alt={`vs sword`}
+                    style={{ ...styles.titleIcon, transform: "scaleX(-1)" }}
+                />
+                <Typography sx={styles.title}>Rules</Typography>
+                <img
+                    src={require(`../../assets/pikachu2.png`)}
+                    alt={`mimikyu`}
+                    style={{ ...styles.titleIcon, width: "33px" }}
+                />
+            </div>
             <div style={styles.ruleContainer}>
                 <div style={styles.ruleBox}>
                     <Typography sx={styles.ruleSubHeader}>
@@ -13,10 +31,10 @@ const Rules = () => {
                     </Typography>
 
                     <Typography align="left">
-                        indicates what combination of your monsters is stronger
-                        than your opponent's. <br />
+                        Indicates what combination of your monsters is needed to
+                        defeat your opponent's. <br />
                         <br />
-                        In this case, to kill monster C, you need both A and B
+                        In this case, to defeat monster C, you need both A and B
                     </Typography>
                     <br />
                     <Closure closure={["AB", "C"]} showPointer={false} />
@@ -26,8 +44,8 @@ const Rules = () => {
                         2. Reflexitivity
                     </Typography>
                     <Typography align="left">
-                        For monsters of the same type, yours will always be
-                        stronger than the opponent's.
+                        For monsters of the same type, yours will always defeat
+                        the opponent's.
                     </Typography>
                     <br />
                     <Closure closure={["A", "A"]} showPointer={false} />
@@ -40,9 +58,9 @@ const Rules = () => {
                         The strength of a monster can propogate.
                         <br />
                         <br />
-                        For example, monster A and B is stronger then C. C is
-                        stronger than D. Therefore, A and B will be stronger
-                        than D.
+                        For example, monster A and B can defeat C. C is able to
+                        defeat D. Therefore, A and B will be able to defeat D
+                        too.
                     </Typography>
                     <br />
                     <Closure closure={["AB", "C"]} showPointer={false} />
@@ -88,6 +106,13 @@ const styles: any = {
     title: {
         fontSize: "30px",
         fontWeight: "bold",
+    },
+    titleIcon: {
+        width: "25px",
+        height: "auto",
+        objectFit: "contain",
+        imageRendering: "pixelated",
+        margin: "0px 10px",
     },
 };
 
