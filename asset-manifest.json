@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.e8e8e8c1.css",
+    "main.js": "/static/js/main.74ebcdfd.js",
+    "static/js/453.04be9311.chunk.js": "/static/js/453.04be9311.chunk.js",
+    "static/media/fightcloud.gif": "/static/media/fightcloud.5f2e19ce7afb824d0155.gif",
+    "static/media/arenaBackground.avif": "/static/media/arenaBackground.13da89be540930246832.avif",
+    "static/media/D.gif": "/static/media/D.bf584a92138336b92f17.gif",
+    "static/media/I.gif": "/static/media/I.645200186e95548e7352.gif",
+    "static/media/J.gif": "/static/media/J.01ecf3eed019563da443.gif",
+    "static/media/C.gif": "/static/media/C.9479e6fc0ecffb59bf8d.gif",
+    "static/media/opponent.gif": "/static/media/opponent.2b29b80af3a52deaaea2.gif",
+    "static/media/F.gif": "/static/media/F.bca959759094a230c85a.gif",
+    "static/media/B.gif": "/static/media/B.066f4b9aa8d456c1e05f.gif",
+    "static/media/sword.png": "/static/media/sword.58d91b408be48088e47a.png",
+    "static/media/E.gif": "/static/media/E.619f9b5c10cd39a2f239.gif",
+    "static/media/G.gif": "/static/media/G.40efdad436e699db69b3.gif",
+    "static/media/player.gif": "/static/media/player.8f096d9429438a7f8758.gif",
+    "static/media/A.gif": "/static/media/A.03fcf00d7ed81d9997ca.gif",
+    "static/media/H.gif": "/static/media/H.93f95aba57e436c98710.gif",
+    "index.html": "/index.html",
+    "main.e8e8e8c1.css.map": "/static/css/main.e8e8e8c1.css.map",
+    "main.74ebcdfd.js.map": "/static/js/main.74ebcdfd.js.map",
+    "453.04be9311.chunk.js.map": "/static/js/453.04be9311.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e8e8e8c1.css",
+    "static/js/main.74ebcdfd.js"
+  ]
+}
