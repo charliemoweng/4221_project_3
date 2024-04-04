@@ -55,7 +55,7 @@ const Rules = () => {
                         3. Transitivity
                     </Typography>
                     <Typography align="left">
-                        The strength of a monster can propogate.
+                        The strength of a monster can propagate.
                         <br />
                         <br />
                         For example, monster A and B can defeat C. C is able to

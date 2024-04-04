@@ -61,9 +61,9 @@ const MatchEndDialogue = (props: Props) => {
         )}
         {props.isWin && (
           <Typography>
-            You used a total of <b>{props.totalRoundsUsed}</b>{" "}
-            {props.totalRoundsUsed === 1 ? "round" : "rounds"} to find all the
-            combinations!
+            You used a total of <b>{props.totalRoundsUsed - 1}</b>{" "}
+            {props.totalRoundsUsed - 1 === 1 ? "round" : "rounds"} to find all
+            the combinations!
           </Typography>
         )}
       </DialogContentText>
