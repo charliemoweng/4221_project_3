@@ -299,7 +299,7 @@ const styles: any = {
         justifyContent: "space-between",
         borderWidth: "3px",
         borderColor: "black",
-        margin: "70px",
+        margin: "60px",
     },
     selectionButtonContainer: {
         display: "flex",

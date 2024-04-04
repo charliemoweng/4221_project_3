@@ -44,33 +44,43 @@ const Team = (props: Props) => {
         itemSize: number
     ) => {
         return (
-            <Grid key={index} item xs={itemSize} sx={styles.monsterContainer}>
-                {props.deadMonsters?.has(monsterId) ? (
-                    <img
-                        src={require(`../../../assets/grave.png`)}
-                        alt={`monster ${monsterId} died`}
-                        style={{
-                            ...styles.monsterImg,
-                        }}
-                    />
-                ) : (
-                    <img
-                        src={require(`../../../assets/monsters/${monsterId}.gif`)}
-                        alt={`monster ${monsterId}`}
-                        style={{
-                            ...styles.monsterImg,
-                            ...(props.flipSprites && styles.flipImg),
-                        }}
-                    />
-                )}
-                <Typography sx={styles.monsterName}>{monsterId}</Typography>
+            <Grid
+                key={index}
+                item
+                xs={itemSize}
+                alignContent="center"
+                justifyContent="center"
+            >
+                <div style={styles.monsterContainer}>
+                    {props.deadMonsters?.has(monsterId) ? (
+                        <img
+                            src={require(`../../../assets/grave.png`)}
+                            alt={`monster ${monsterId} died`}
+                            style={{
+                                ...styles.monsterImg,
+                            }}
+                        />
+                    ) : (
+                        <img
+                            src={require(`../../../assets/monsters/${monsterId}.gif`)}
+                            alt={`monster ${monsterId}`}
+                            style={{
+                                ...styles.monsterImg,
+                                ...(props.flipSprites && styles.flipImg),
+                            }}
+                        />
+                    )}
+                    <Typography sx={styles.monsterName}>{monsterId}</Typography>
+                </div>
             </Grid>
         );
     };
 
     const renderTeam = () => {
         const MAX_ROWS = 2;
-        const itemSize = 12 / (props.teamSize / 2); // total grid size is 12 unity
+        const itemSize = 12 / Math.ceil(props.teamSize / 2); // total grid size is 12 unity
+        console.log("size " + props.teamSize);
+        console.log("item " + itemSize);
 
         return (
             <div style={styles.teamContainer}>
@@ -135,7 +145,6 @@ const styles: any = {
         display: "flex",
         direction: "row",
         alignItems: "center",
-        // border: "1px solid black",
         width: "50%",
         height: "auto",
     },
@@ -148,17 +157,19 @@ const styles: any = {
     },
     rowContainer: {
         width: "100%",
-        minHeight: "170px",
+        height: "170px",
     },
     monsterContainer: {
         position: "relative",
         display: "flex",
         alignItems: "center",
+        justifyContent: "center",
+        width: "120px",
+        minHeight: "120px",
     },
     monsterImg: {
-        width: "100%",
+        width: "100px",
         height: "100%",
-        minHeight: "40px",
         objectFit: "contain",
         imageRendering: "pixelated",
     },
