@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React from "react";
 import {
     GameInfoContext,
     GameInfoContextType,
@@ -84,7 +84,7 @@ const FunctionalDependencies = (props: Props) => {
                         variant="h4"
                         sx={{ ...styles.heading }}
                     >
-                        Monster Matchups
+                        <b>Monster Matchups</b>
                     </Typography>
                     {displayTooltip(
                         <Typography
@@ -110,7 +110,7 @@ const FunctionalDependencies = (props: Props) => {
             <div style={styles.closureSectionContainer}>
                 <div style={{ ...styles.header, marginBottom: "10px" }}>
                     <Typography variant="h5" sx={{ ...styles.heading }}>
-                        Previous teams
+                        <b>Previous teams</b>
                     </Typography>
                     {displayTooltip(
                         <Typography
@@ -129,10 +129,33 @@ const FunctionalDependencies = (props: Props) => {
         );
     };
 
+    const displayGameStates = () => {
+        return (
+            <div style={styles.gameStateContainer}>
+                <Typography variant="h6">
+                    <b>Round: </b>
+                    {matchInfo?.currRoundNumber} / {matchInfo?.totalRounds}
+                </Typography>
+
+                <Typography variant="h6">
+                    <b>Monsters Used: </b>
+                    {matchInfo?.currMonstersUsed}
+                </Typography>
+
+                <Typography variant="h6">
+                    <b>Team Combinations Found: </b>
+                    {matchInfo?.candidateNoOfKeysFound} /{" "}
+                    {matchInfo?.totalNoOfCandidateKeys}
+                </Typography>
+            </div>
+        );
+    };
+
     return (
         <div style={styles.mainContainer}>
             {displayMatchupSection()}
             {displayClosuresSection()}
+            {displayGameStates()}
         </div>
     );
 };
@@ -160,6 +183,12 @@ const styles: any = {
         display: "flex",
         width: "100%",
         flexWrap: "wrap",
+    },
+    gameStateContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-evenly",
     },
 };
 

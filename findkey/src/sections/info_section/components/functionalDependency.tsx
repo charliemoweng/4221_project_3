@@ -6,8 +6,8 @@ type Props = {
 };
 
 const FunctionalDependency = (props: Props) => {
-    const MAX_HEIGHT = "70px";
-    const MONSTER_HEIGHT = "50px";
+    const MAX_HEIGHT = "55px";
+    const MONSTER_HEIGHT = "40px";
     const POINTER_HEIGHT = "40px";
 
     const renderMonster = (monsterId: string, index: number) => {

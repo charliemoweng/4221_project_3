@@ -6,6 +6,7 @@ import {
 import { Button, Alert } from "@mui/material";
 import MonsterSelectionButton from "./components/monsterSelectionButton";
 import Team from "./components/team";
+import MatchEndDialogue from "./components/matchEndDialogue";
 import { GiShardSword, GiNextButton } from "react-icons/gi";
 
 type Props = {};
@@ -18,11 +19,18 @@ enum AlertStates {
     LOSE,
 }
 
+enum GameStates {
+    SELECT_TEAM,
+    WIN_ROUND,
+    LOSE_ROUND,
+    WIN_MATCH,
+    LOSE_MATCH,
+}
+
 const FIGHT_CLOUD_ANIM_TIME = 2000; //its in miliseconds
 
 const ArenaSection = (props: Props) => {
     const [currTeam, setCurrTeam] = useState<Set<string>>(new Set<string>());
-    const [isSelectingTeam, setIsSelectingTeam] = useState<boolean>(true);
     const [alertState, setAlertState] = useState<AlertStates>(AlertStates.NONE);
     const [showFightCloud, setShowFightCloud] = useState<boolean>(false);
 
@@ -30,7 +38,9 @@ const ArenaSection = (props: Props) => {
     const [enemiesDead, setEnemiesDead] = useState<Set<string>>(
         new Set<string>()
     );
-    const [isWinRound, setIsWinRound] = useState<boolean>(false);
+    const [currGameState, setCurrGameState] = useState<GameStates>(
+        GameStates.SELECT_TEAM
+    );
 
     const {
         matchInfo,
@@ -76,29 +86,38 @@ const ArenaSection = (props: Props) => {
         }, FIGHT_CLOUD_ANIM_TIME);
     };
 
-    const startNewGame = () => {
+    const startNewGame = (difficulty: number) => {
         // reset states
         setCurrTeam(new Set<string>());
         setEnemiesDead(new Set<string>());
-        setIsSelectingTeam(true);
-        setIsWinRound(false);
+        setCurrGameState(GameStates.SELECT_TEAM);
         setAlertState(AlertStates.NONE);
 
         // start new game
-        handleNewMatch(0);
+        handleNewMatch(difficulty);
     };
 
     useEffect(() => {
-        if (enemiesDead.size !== 0) {
-            if (enemiesDead.size === matchInfo?.noOfAttributes) {
-                setIsWinRound(true);
-                setAlertState(AlertStates.WIN);
-            } else {
-                setIsWinRound(false);
-                setAlertState(AlertStates.LOSE);
-                // Change fight button to next round button
-                setIsSelectingTeam(false);
-            }
+        if (matchInfo === null || enemiesDead.size === 0) return;
+        // check round
+        if (enemiesDead.size === matchInfo.noOfAttributes) {
+            // check if manage to win CURR ROUND (not the curr match)
+            setCurrGameState(GameStates.WIN_ROUND);
+            setAlertState(AlertStates.WIN);
+        } else {
+            setCurrGameState(GameStates.LOSE_ROUND);
+            setAlertState(AlertStates.LOSE);
+        }
+
+        // check win lose condition for the entire match
+        if (
+            matchInfo.candidateNoOfKeysFound >= matchInfo.totalNoOfCandidateKeys
+        ) {
+            setCurrGameState(GameStates.WIN_MATCH);
+            handleNewRound(); // HACK: just to restart the round count so the useeffects dependent on round will play
+        } else if (matchInfo.currRoundNumber >= matchInfo.totalRounds) {
+            setCurrGameState(GameStates.LOSE_MATCH);
+            handleNewRound();
         }
     }, [enemiesDead]);
 
@@ -106,8 +125,7 @@ const ArenaSection = (props: Props) => {
         // reset states
         setCurrTeam(new Set<string>());
         setEnemiesDead(new Set<string>());
-        setIsSelectingTeam(true);
-        setIsWinRound(false);
+        setCurrGameState(GameStates.SELECT_TEAM);
         setAlertState(AlertStates.NONE);
 
         // start next round
@@ -125,11 +143,6 @@ const ArenaSection = (props: Props) => {
 
         return monsters;
     }, [matchInfo?.noOfAttributes]);
-
-    // if player could not wipe enemy team, it means their team got wiped
-    const isPlayerTeamWiped = () => {
-        return !isSelectingTeam && !isWinRound;
-    };
 
     const renderAlerts = () => {
         return (
@@ -168,7 +181,7 @@ const ArenaSection = (props: Props) => {
         monsterTypes?.forEach((id) => {
             buttons.push(
                 <MonsterSelectionButton
-                    isDisabled={!isSelectingTeam}
+                    isDisabled={currGameState !== GameStates.SELECT_TEAM}
                     key={id}
                     id={id}
                     isSelected={currTeam.has(id)}
@@ -181,7 +194,7 @@ const ArenaSection = (props: Props) => {
         });
 
         return <div style={styles.selectionButtonContainer}>{buttons}</div>;
-    }, [monsterTypes, currTeam, isSelectingTeam]);
+    }, [monsterTypes, currTeam, currGameState]);
 
     const renderFightCloud = () => {
         return (
@@ -206,7 +219,9 @@ const ArenaSection = (props: Props) => {
                     flipSprites={true}
                     trainerIsOnRight={false}
                     deadMonsters={
-                        isPlayerTeamWiped() ? monsterTypes : undefined
+                        currGameState === GameStates.LOSE_ROUND
+                            ? monsterTypes
+                            : undefined
                     }
                 />
                 <Team
@@ -220,16 +235,7 @@ const ArenaSection = (props: Props) => {
             </div>
             <div style={styles.selectionContainer}>
                 {renderMonsterSelectionSection}
-                {alertState === AlertStates.WIN ? (
-                    <Button
-                        variant="contained"
-                        onClick={startNewGame}
-                        sx={[styles.nextRoundButton, styles.button]}
-                    >
-                        <GiNextButton />
-                        New Game
-                    </Button>
-                ) : isSelectingTeam ? (
+                {currGameState === GameStates.SELECT_TEAM ? (
                     <Button
                         variant="contained"
                         onClick={handleFight}
@@ -249,6 +255,19 @@ const ArenaSection = (props: Props) => {
                     </Button>
                 )}
                 {renderAlerts()}
+
+                <MatchEndDialogue
+                    isOpen={
+                        currGameState === GameStates.WIN_MATCH ||
+                        currGameState === GameStates.LOSE_MATCH
+                    }
+                    isWin={currGameState === GameStates.WIN_MATCH}
+                    totalMonsterCount={matchInfo?.currMonstersUsed ?? 0}
+                    totalRoundsUsed={matchInfo?.currRoundNumber ?? 0}
+                    combinationsFound={matchInfo?.candidateNoOfKeysFound ?? 0}
+                    totalCombinations={matchInfo?.totalNoOfCandidateKeys ?? 0}
+                    onStartNewGame={startNewGame}
+                />
             </div>
             {showFightCloud && renderFightCloud()}
         </div>
